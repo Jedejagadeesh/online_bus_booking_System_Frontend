@@ -9,11 +9,13 @@ export function AuthProvider({ children }) {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
+  const BASE_URL = "https://online-bus-booking-system-backend-2m8m.onrender.com/api";
+
   // ================= LOGIN FUNCTION =================
   const login = async (email, password) => {
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/login/",   // ✅ correct backend URL
+        `${BASE_URL}/login/`,
         {
           email,
           password,
@@ -35,7 +37,7 @@ export function AuthProvider({ children }) {
   const register = async (name, email, password) => {
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/api/register/",
+        `${BASE_URL}/register/`,
         {
           name,
           email,
@@ -61,7 +63,7 @@ export function AuthProvider({ children }) {
         user,
         setUser,
         login,
-        register,   // ✅ added register
+        register,
         showLogin,
         showSignup,
         setShowLogin,
