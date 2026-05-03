@@ -1,9 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api"   // ✅ LOCAL BACKEND
-  // For production:
-  // baseURL: "https://onlinebusticketreservationsystem-production.up.railway.app/api"
+  baseURL: "https://online-bus-booking-system-backend-2m8m.onrender.com/api"
 });
 
 // ================= BUSES =================
@@ -18,9 +16,9 @@ export const bookSeats = (data) =>
 
 // ================= AUTH =================
 export const loginUser = (email, password) =>
-  api.post(`/login/`, { email, password });   // ✅ FIXED
+  api.post(`/login/`, { email, password });
 
 export const signupUser = (data) =>
-  api.post(`/register/`, data);               // ✅ FIXED (NOT signup)
+  api.post(`/register/`, data);
 
 export default api;
