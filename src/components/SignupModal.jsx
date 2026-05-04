@@ -54,12 +54,14 @@ export default function SignupModal() {
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+           style={{marginRight:"20px",fontSize:"15px",fontWeight:"bold"}}
         />
 
         <input
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          style={{marginRight:"20px",fontSize:"15px",fontWeight:"bold"}}
         />
 
         <input
@@ -67,6 +69,7 @@ export default function SignupModal() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+           style={{marginRight:"20px",fontSize:"15px",fontWeight:"bold"}}
         />
 
         {/* BUTTON (FIXED) */}

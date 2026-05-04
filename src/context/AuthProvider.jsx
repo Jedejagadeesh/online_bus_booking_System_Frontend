@@ -9,9 +9,11 @@ export function AuthProvider({ children }) {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
-  const BASE_URL = "https://online-bus-booking-system-backend-2m8m.onrender.com";
+  // ✅ FIXED BASE URL (IMPORTANT)
+  const BASE_URL =
+    "https://online-bus-booking-system-backend-2m8m.onrender.com/api";
 
-  // Load user from localStorage (IMPORTANT FIX)
+  // ================= LOAD USER =================
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
@@ -53,7 +55,7 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // ================= LOGOUT (IMPORTANT ADDITION) =================
+  // ================= LOGOUT =================
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");

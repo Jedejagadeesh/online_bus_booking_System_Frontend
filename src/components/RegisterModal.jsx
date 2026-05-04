@@ -31,17 +31,20 @@ export default function RegisterModal() {
       <input
         placeholder="Name"
         onChange={(e) => setName(e.target.value)}
+         style={{marginRight:"20px",fontSize:"15px",fontWeight:"bold"}}
       />
 
       <input
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
+         style={{marginRight:"20px",fontSize:"15px",fontWeight:"bold"}}
       />
 
       <input
         type="password"
         placeholder="Password"
         onChange={(e) => setPassword(e.target.value)}
+         style={{marginRight:"20px",fontSize:"15px",fontWeight:"bold"}}
       />
 
       <button onClick={handleRegister}>
