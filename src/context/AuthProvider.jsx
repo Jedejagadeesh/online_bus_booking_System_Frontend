@@ -5,11 +5,10 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
-  // ✅ FIXED BASE URL (IMPORTANT)
+  // ✅ BASE URL
   const BASE_URL =
     "https://online-bus-booking-system-backend-2m8m.onrender.com/api";
 
@@ -61,7 +60,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("user");
   };
 
-  const isAuthenticated = () => user !== null;
+  const isAuthenticated = () => !!user;
 
   return (
     <AuthContext.Provider

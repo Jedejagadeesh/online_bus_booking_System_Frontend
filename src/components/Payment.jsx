@@ -43,17 +43,17 @@ export default function Payment({ bus, onSuccess }) {
     try {
       setLoading(true);
 
+      // ✅ FIXED PAYLOAD (MATCH BACKEND)
       const payload = {
         bus: busId,
-        user: user.id,
-        seats: seats.length,   // ✅ FIXED (send number not string)
-        date: date,            // ✅ FIXED (no journey_date)
+        seats: seats.join(","),     // IMPORTANT FIX
+        journey_date: date,         // IMPORTANT FIX
+        user_id: user.id,
         name,
         email,
-        total: totalPrice,
       };
 
-      console.log("PAYLOAD SENT:", payload);
+      console.log("PAYLOAD:", payload);
 
       const res = await api.post("/book/", payload);
 
@@ -61,17 +61,14 @@ export default function Payment({ bus, onSuccess }) {
         ticketNo: "TKT" + Date.now(),
         user: { name, email },
         bus,
-        seats: seats,
+        seats: seats.join(","),
         total: totalPrice,
         date,
         status: "Booked",
       };
 
       const old = JSON.parse(localStorage.getItem("bookings")) || [];
-      localStorage.setItem(
-        "bookings",
-        JSON.stringify([...old, ticketData])
-      );
+      localStorage.setItem("bookings", JSON.stringify([...old, ticketData]));
 
       localStorage.removeItem("seats");
 
@@ -91,17 +88,8 @@ export default function Payment({ bus, onSuccess }) {
     <div className="paymentBox">
       <h2>💳 Payment</h2>
 
-      <input
-        placeholder="Enter Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
-
-      <input
-        placeholder="Enter Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" />
+      <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
 
       <p>📅 Date: {date}</p>
       <p>💺 Seats: {seats.join(", ")}</p>

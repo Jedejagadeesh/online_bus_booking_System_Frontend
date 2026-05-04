@@ -7,7 +7,7 @@ export default function LoginPopup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // RESET WHEN COMPONENT OPENS
+  // reset when popup opens
   useEffect(() => {
     setEmail("");
     setPassword("");
@@ -21,14 +21,13 @@ export default function LoginPopup() {
     }
 
     try {
-      // ⚠️ login must be a FUNCTION from context
       await login(email, password);
 
       alert("Login successful ✅");
       setShowLogin(false);
     } catch (err) {
-      console.log("LOGIN ERROR:", err?.response?.data || err.message);
-      alert("Login failed ❌");
+      console.log("LOGIN ERROR:", err.response?.data || err.message);
+      alert("Login failed ❌ Check credentials");
     }
   };
 
@@ -38,25 +37,28 @@ export default function LoginPopup() {
 
         <h2>Login</h2>
 
-        {/* ❌ FIXED: class -> className */}
+        {/* close button */}
         <p
           style={{
             cursor: "pointer",
             color: "black",
             textAlign: "right",
-            fontSize: "30px"
+            fontSize: "30px",
           }}
           onClick={() => setShowLogin(false)}
         >
           <i className="fa-solid fa-circle-xmark"></i>
         </p>
 
+        {/* EMAIL */}
         <input
+          type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
+        {/* PASSWORD */}
         <input
           type="password"
           placeholder="Password"
@@ -64,10 +66,12 @@ export default function LoginPopup() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
+        {/* LOGIN BUTTON */}
         <button onClick={handleLogin}>
           Login
         </button>
 
+        {/* SWITCH TO SIGNUP */}
         <p>
           New user?{" "}
           <span
@@ -81,6 +85,7 @@ export default function LoginPopup() {
           </span>
         </p>
 
+        {/* CLOSE */}
         <p
           style={{ cursor: "pointer", color: "red" }}
           onClick={() => setShowLogin(false)}
