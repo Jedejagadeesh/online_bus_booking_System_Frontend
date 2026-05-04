@@ -18,26 +18,26 @@ export default function MyBookings() {
         <div className="booking-list">
           {bookings.map((b, i) => (
             <div key={i} className="booking-card">
+              <h3>🎫 Ticket #{b.id || i + 1}</h3>
 
-              <h3>🎫 {b.ticketNo}</h3>
-
-              <p><b>{b.bus.source}</b> ➜ <b>{b.bus.destination}</b></p>
+              <p>
+                <b>{b.bus?.source}</b> ➜ <b>{b.bus?.destination}</b>
+              </p>
 
               <p>💺 Seats: {b.seats}</p>
-
               <p>💰 ₹{b.total}</p>
-
               <p>📅 {b.date}</p>
 
-              <p>Status: {b.status}</p>
+              <p>Status: {b.status || "Confirmed"}</p>
 
               <button
                 className="track-btn"
-                onClick={() => alert(`Bus is on the way to ${b.bus.destination} 🚍`)}
+                onClick={() =>
+                  alert(`Bus is on the way 🚍`)
+                }
               >
                 Track Bus
               </button>
-
             </div>
           ))}
         </div>

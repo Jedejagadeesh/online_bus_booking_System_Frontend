@@ -11,7 +11,6 @@ export default function Payment({ bus, onSuccess }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  // ✅ PRIORITY: navigation state
   const seats =
     location.state?.seats ||
     JSON.parse(localStorage.getItem("seats")) ||
@@ -31,6 +30,11 @@ export default function Payment({ bus, onSuccess }) {
       return;
     }
 
+    if (!user?.id) {
+      alert("User not logged in ❌");
+      return;
+    }
+
     if (seats.length === 0) {
       alert("No seats selected");
       return;
@@ -39,27 +43,35 @@ export default function Payment({ bus, onSuccess }) {
     try {
       setLoading(true);
 
-      const res = await api.post("/book/", {
+      const payload = {
         bus: busId,
-        seats: seats.join(","),
-        journey_date: date,
-        user_id: user?.id,
+        user: user.id,
+        seats: seats.length,   // ✅ FIXED (send number not string)
+        date: date,            // ✅ FIXED (no journey_date)
         name,
-        email
-      });
+        email,
+        total: totalPrice,
+      };
+
+      console.log("PAYLOAD SENT:", payload);
+
+      const res = await api.post("/book/", payload);
 
       const ticketData = {
         ticketNo: "TKT" + Date.now(),
         user: { name, email },
         bus,
-        seats: seats.join(","),
+        seats: seats,
         total: totalPrice,
         date,
-        status: "Booked"
+        status: "Booked",
       };
 
       const old = JSON.parse(localStorage.getItem("bookings")) || [];
-      localStorage.setItem("bookings", JSON.stringify([...old, ticketData]));
+      localStorage.setItem(
+        "bookings",
+        JSON.stringify([...old, ticketData])
+      );
 
       localStorage.removeItem("seats");
 
@@ -68,8 +80,8 @@ export default function Payment({ bus, onSuccess }) {
       onSuccess(ticketData);
 
     } catch (err) {
-      console.log(err.response?.data || err.message);
-      alert("Booking failed ❌");
+      console.log("BOOKING ERROR:", err.response?.data || err.message);
+      alert("Booking failed ❌ Check console");
     }
 
     setLoading(false);
@@ -77,7 +89,6 @@ export default function Payment({ bus, onSuccess }) {
 
   return (
     <div className="paymentBox">
-
       <h2>💳 Payment</h2>
 
       <input
@@ -99,7 +110,6 @@ export default function Payment({ bus, onSuccess }) {
       <button onClick={handlePayment}>
         {loading ? "Processing..." : "Pay Now"}
       </button>
-
     </div>
   );
 }
