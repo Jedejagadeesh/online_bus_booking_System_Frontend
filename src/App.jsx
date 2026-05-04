@@ -90,21 +90,25 @@ export default function App() {
               placeholder="From"
               value={from}
               onChange={(e) => setFrom(e.target.value)}
+              style={{fontSize:"20px",fontWeight:"bold"}}
             />
-
+<i className="fa-solid fa-arrow-right" style={{fontSize:"20px",fontWeight:"bold",position:"relative",top:"18px"}}></i>
             <input
               placeholder="To"
               value={to}
               onChange={(e) => setTo(e.target.value)}
+                style={{fontSize:"20px",fontWeight:"bold"}}
             />
 
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
+                style={{fontSize:"20px",fontWeight:"bold",height:"20px",position:"relative",top:"5px"}}
             />
 
-            <button onClick={handleSearch}>
+            <button onClick={handleSearch}
+              style={{fontSize:"20px",fontWeight:"bold",position:"relative",bottom:"10px"}}>
               Search Buses
             </button>
           </div>
@@ -113,7 +117,7 @@ export default function App() {
           {step === "search" && (
             <div className="busContainer">
               {buses.length === 0 ? (
-                <p>No buses found</p>
+               <p style={{fontWeight:"bold"}}>🚍 No buses available. Please search your buses using another route or time.</p>
               ) : (
                 buses.map((bus, i) => (
                   <BusCard
@@ -175,7 +179,7 @@ export default function App() {
       )}
 
       {/* ================= FOOTER ================= */}
-      <Footer />
+      <Footer/>
     </div>
   );
 }

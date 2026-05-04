@@ -1,8 +1,18 @@
 import axios from "axios";
 
+// ================= BASE API =================
 const api = axios.create({
-  baseURL: "https://online-bus-booking-system-backend-2m8m.onrender.com/api"
+  baseURL: "https://online-bus-booking-system-backend-2m8m.onrender.com/api",
 });
+
+// ================= DEBUG INTERCEPTOR (IMPORTANT) =================
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    console.log("API ERROR:", error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
 
 // ================= BUSES =================
 export const searchBuses = (from, to) =>
@@ -11,8 +21,21 @@ export const searchBuses = (from, to) =>
 export const getBookedSeats = (busId, date) =>
   api.get(`/booked/${busId}/?date=${date}`);
 
-export const bookSeats = (data) =>
-  api.post(`/book/`, data);
+// ================= BOOKING =================
+export const bookSeats = async (data) => {
+  try {
+    console.log("Booking Request Data:", data);
+
+    const res = await api.post(`/book/`, data);
+
+    console.log("Booking Success:", res.data);
+    return res.data;
+
+  } catch (error) {
+    console.log("Booking Failed:", error.response?.data || error.message);
+    throw error;
+  }
+};
 
 // ================= AUTH =================
 export const loginUser = (email, password) =>

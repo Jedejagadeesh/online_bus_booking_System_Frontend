@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -9,20 +9,24 @@ export function AuthProvider({ children }) {
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
-  const BASE_URL = "https://online-bus-booking-system-backend-2m8m.onrender.com/api";
+  const BASE_URL = "https://online-bus-booking-system-backend-2m8m.onrender.com";
 
-  // ================= LOGIN FUNCTION =================
+  // Load user from localStorage (IMPORTANT FIX)
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+  // ================= LOGIN =================
   const login = async (email, password) => {
     try {
-      const res = await axios.post(
-        `${BASE_URL}/login/`,
-        {
-          email,
-          password,
-        }
-      );
+      const res = await axios.post(`${BASE_URL}/login/`, {
+        email,
+        password,
+      });
 
-      // ✅ store only user data
       setUser(res.data.user);
       localStorage.setItem("user", JSON.stringify(res.data.user));
 
@@ -33,17 +37,14 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // ================= REGISTER FUNCTION =================
+  // ================= REGISTER =================
   const register = async (name, email, password) => {
     try {
-      const res = await axios.post(
-        `${BASE_URL}/register/`,
-        {
-          name,
-          email,
-          password,
-        }
-      );
+      const res = await axios.post(`${BASE_URL}/register/`, {
+        name,
+        email,
+        password,
+      });
 
       return res.data;
     } catch (error) {
@@ -52,10 +53,13 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // ================= CHECK AUTH =================
-  const isAuthenticated = () => {
-    return user !== null;
+  // ================= LOGOUT (IMPORTANT ADDITION) =================
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
   };
+
+  const isAuthenticated = () => user !== null;
 
   return (
     <AuthContext.Provider
@@ -64,6 +68,7 @@ export function AuthProvider({ children }) {
         setUser,
         login,
         register,
+        logout,
         showLogin,
         showSignup,
         setShowLogin,
@@ -76,7 +81,6 @@ export function AuthProvider({ children }) {
   );
 }
 
-// ================= CUSTOM HOOK =================
 export function useAuth() {
   return useContext(AuthContext);
 }

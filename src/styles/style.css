@@ -449,11 +449,39 @@ button {
 
 /* ================= FOOTER ================= */
 .footer {
-  margin-top: 20px;
+  margin-top: 59px;
   background: #111;
   color: white;
   text-align: center;
   padding: 20px;
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .footer {
+    margin-top: 40px;
+    padding: 18px;
+    font-size: 14px;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .footer {
+    margin-top: 30px;
+    padding: 15px;
+    font-size: 13px;
+    text-align: center;
+  }
+}
+
+/* Very small devices */
+@media (max-width: 320px) {
+  .footer {
+    margin-top: 20px;
+    padding: 12px;
+    font-size: 12px;
+  }
 }
 
 /* ================= RESPONSIVE ================= */
