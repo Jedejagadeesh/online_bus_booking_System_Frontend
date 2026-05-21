@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../api/api";
 import { useAuth } from "../context/AuthProvider";
+
 
 export default function SignupModal() {
   const { setShowSignup, setShowLogin } = useAuth();
@@ -8,15 +9,42 @@ export default function SignupModal() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // Reset when modal opens (component stays mounted, but showSignup flips)
+  useEffect(() => {
+    setName("");
+    setEmail("");
+    setPassword("");
+    setLoading(false);
+    setError("");
+    setSuccess("");
+  }, [setShowSignup]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setShowSignup(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [setShowSignup]);
 
   // ================= REGISTER =================
   const handleRegister = async () => {
+    setError("");
+    setSuccess("");
+
     if (!name || !email || !password) {
-      alert("Please fill all fields");
+      setError("Please fill all fields");
       return;
     }
 
     try {
+      setLoading(true);
       const res = await api.post("/register/", {
         name,
         email,
@@ -24,44 +52,61 @@ export default function SignupModal() {
       });
 
       console.log("SUCCESS:", res.data);
-      alert("Registered successfully ✅");
-
-      // close modal after success
+      setSuccess("Registered successfully ✅");
       setShowSignup(false);
-
     } catch (err) {
       console.log("ERROR RESPONSE:", err.response?.data);
-      alert(err.response?.data?.error || "Register failed ❌");
+      const msg =
+        err?.response?.data?.error || err?.response?.data || "Register failed";
+      setError(typeof msg === "string" ? msg : "Register failed ❌");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-card">
-
+    <div
+      className="modal-overlay"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) setShowSignup(false);
+      }}
+    >
+      <div className="modal-card" role="dialog" aria-modal="true" aria-label="Register">
         <h2>Register</h2>
 
-        {/* CLOSE BUTTON */}
         <p
-           style={{ cursor: "pointer", color: "black", textAlign: "right" ,fontSize:"30px"}}
+          style={{ cursor: "pointer", color: "black", textAlign: "right", fontSize: "30px" }}
           onClick={() => setShowSignup(false)}
+          aria-label="Close"
         >
-            <i className="fa-solid fa-circle-xmark"></i>
+          <i className="fa-solid fa-circle-xmark"></i>
         </p>
 
-        {/* INPUTS (CONNECTED) */}
+        {error && (
+          <div style={{ color: "#b00020", fontWeight: "bold", marginBottom: 10 }}>
+            {error}
+          </div>
+        )}
+        {success && (
+          <div style={{ color: "#1b5e20", fontWeight: "bold", marginBottom: 10 }}>
+            {success}
+          </div>
+        )}
+
         <input
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-           style={{marginRight:"20px",fontSize:"15px",fontWeight:"bold"}}
+          style={{ marginRight: "20px", fontSize: "15px", fontWeight: "bold" }}
+          disabled={loading}
         />
 
         <input
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{marginRight:"20px",fontSize:"15px",fontWeight:"bold"}}
+          style={{ marginRight: "20px", fontSize: "15px", fontWeight: "bold" }}
+          disabled={loading}
         />
 
         <input
@@ -69,18 +114,25 @@ export default function SignupModal() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-           style={{marginRight:"20px",fontSize:"15px",fontWeight:"bold"}}
+          style={{ marginRight: "20px", fontSize: "15px", fontWeight: "bold" }}
+          disabled={loading}
         />
 
-        {/* BUTTON (FIXED) */}
-        <button onClick={handleRegister}>
-          Register
+        <button onClick={handleRegister} disabled={loading}>
+          {loading ? "Registering..." : "Register"}
         </button>
-       <p
-           style={{ cursor: "pointer", color: "green", textAlign: "right" ,fontSize:"20px",fontWeight:"bold"}}
-          onClick={() => setShowSignup(false)}
-        >
-            close
+
+        <p>
+          Already have an account?{" "}
+          <span
+            style={{ cursor: "pointer", color: "blue" }}
+            onClick={() => {
+              setShowSignup(false);
+              setShowLogin(true);
+            }}
+          >
+            Login
+          </span>
         </p>
       </div>
     </div>

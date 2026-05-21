@@ -46,7 +46,6 @@ export default function RegisterModal() {
         onChange={(e) => setPassword(e.target.value)}
          style={{marginRight:"20px",fontSize:"15px",fontWeight:"bold"}}
       />
-
       <button onClick={handleRegister}>
         Register
       </button>

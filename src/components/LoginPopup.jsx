@@ -6,38 +6,63 @@ export default function LoginPopup() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  // reset when popup opens
+  // Reset when modal opens (component stays mounted, but showLogin flips)
   useEffect(() => {
     setEmail("");
     setPassword("");
-  }, []);
+    setLoading(false);
+    setError("");
+    setSuccess("");
+  }, [setShowLogin]);
 
-  // ================= LOGIN HANDLER =================
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setShowLogin(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [setShowLogin]);
+
   const handleLogin = async () => {
+    setError("");
+    setSuccess("");
+
     if (!email || !password) {
-      alert("Please enter email & password");
+      setError("Please enter email and password");
       return;
     }
 
     try {
+      setLoading(true);
       await login(email, password);
-
-      alert("Login successful ✅");
+      setSuccess("Login successful ✅");
       setShowLogin(false);
     } catch (err) {
       console.log("LOGIN ERROR:", err.response?.data || err.message);
-      alert("Login failed ❌ Check credentials");
+      const msg =
+        err?.response?.data?.error || err?.response?.data || "Login failed";
+      setError(typeof msg === "string" ? msg : "Login failed ❌");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-card">
-
+    <div
+      className="modal-overlay"
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) setShowLogin(false);
+      }}
+    >
+      <div className="modal-card" role="dialog" aria-modal="true" aria-label="Login">
         <h2>Login</h2>
 
-        {/* close button */}
         <p
           style={{
             cursor: "pointer",
@@ -46,32 +71,42 @@ export default function LoginPopup() {
             fontSize: "30px",
           }}
           onClick={() => setShowLogin(false)}
+          aria-label="Close"
         >
           <i className="fa-solid fa-circle-xmark"></i>
         </p>
 
-        {/* EMAIL */}
+        {error && (
+          <div style={{ color: "#b00020", fontWeight: "bold", marginBottom: 10 }}>
+            {error}
+          </div>
+        )}
+        {success && (
+          <div style={{ color: "#1b5e20", fontWeight: "bold", marginBottom: 10 }}>
+            {success}
+          </div>
+        )}
+
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={loading}
         />
 
-        {/* PASSWORD */}
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          disabled={loading}
         />
 
-        {/* LOGIN BUTTON */}
-        <button onClick={handleLogin}>
-          Login
+        <button onClick={handleLogin} disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
         </button>
 
-        {/* SWITCH TO SIGNUP */}
         <p>
           New user?{" "}
           <span
@@ -84,15 +119,6 @@ export default function LoginPopup() {
             Register
           </span>
         </p>
-
-        {/* CLOSE */}
-        <p
-          style={{ cursor: "pointer", color: "red" }}
-          onClick={() => setShowLogin(false)}
-        >
-          Close
-        </p>
-
       </div>
     </div>
   );
