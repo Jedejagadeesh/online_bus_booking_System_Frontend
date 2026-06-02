@@ -34,7 +34,8 @@ export default function App() {
   // ================= SEARCH =================
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [date, setDate] = useState("");
+  const today = new Date().toISOString().split("T")[0];
+  const [date, setDate] = useState(today);
   const [buses, setBuses] = useState([]);
 
   // ================= FLOW =================
@@ -56,7 +57,7 @@ export default function App() {
     }
 
     try {
-      const res = await searchBuses(from, to);
+      const res = await searchBuses(from, to, date);
       setBuses(res.data.routes || []);
       setStep("search");
     } catch (err) {
@@ -101,11 +102,19 @@ export default function App() {
             />
 
             <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-                style={{fontSize:"20px",fontWeight:"bold",height:"20px",position:"relative",top:"5px"}}
-            />
+  type="date"
+  value={date}
+  min={today}
+  onChange={(e) => setDate(e.target.value)}
+  style={{
+    fontSize: "20px",
+    fontWeight: "bold",
+    height: "50px",
+    padding: "8px 12px",
+    borderRadius: "8px",
+    cursor: "pointer"
+  }}
+/>
 
             <button onClick={handleSearch}
               style={{fontSize:"20px",fontWeight:"bold",position:"relative",bottom:"10px"}}>

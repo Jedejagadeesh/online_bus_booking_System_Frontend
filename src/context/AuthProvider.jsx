@@ -3,18 +3,39 @@ import axios from "axios";
 
 const AuthContext = createContext();
 
+function normalizeAuthResponse(data) {
+  // Backend may return different shapes; handle common ones.
+  // Examples:
+  // 1) { user: {...}, token: "..." }
+  // 2) { user: {...} }
+  // 3) { token: "...", user: {...} }
+  // 4) { access: "...", user: {...} }
+  const user = data?.user ?? data?.payload?.user ?? data?.data?.user ?? null;
+  const token =
+    data?.token ?? data?.access ?? data?.accessToken ?? data?.jwt ?? null;
+  return { user, token };
+}
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
 
-  // ✅ BASE URL
+  // ✅ BASE URL (use local backend when running on your machine)
   const BASE_URL =
-    "https://online-bus-booking-system-backend-2m8m.onrender.com/api";
+    import.meta.env.VITE_API_BASE_URL || "https://online-bus-booking-system-backend-2m8m.onrender.com/api";
 
-  // ================= LOAD USER =================
+  // ================= LOAD USER / TOKEN =================
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
+    const savedToken = localStorage.getItem("token");
+
+    if (savedToken && !savedUser) {
+      // If backend only returns token, user might be absent.
+      setUser({ email: "authenticated" });
+      return;
+    }
+
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
@@ -28,8 +49,15 @@ export function AuthProvider({ children }) {
         password,
       });
 
-      setUser(res.data.user);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      const { user: nextUser, token } = normalizeAuthResponse(res.data);
+
+      if (nextUser) {
+        setUser(nextUser);
+        localStorage.setItem("user", JSON.stringify(nextUser));
+      }
+      if (token) {
+        localStorage.setItem("token", token);
+      }
 
       return res.data;
     } catch (error) {
@@ -58,9 +86,14 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
-  const isAuthenticated = () => !!user;
+  const isAuthenticated = () => {
+    const hasUser = !!user;
+    const hasToken = !!localStorage.getItem("token");
+    return hasUser || hasToken;
+  };
 
   return (
     <AuthContext.Provider
@@ -85,3 +118,4 @@ export function AuthProvider({ children }) {
 export function useAuth() {
   return useContext(AuthContext);
 }
+

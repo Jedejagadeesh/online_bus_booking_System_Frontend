@@ -1,9 +1,8 @@
-# Bus Booking CSS Fixes - Progress Tracker
+# TODO
+- [x] Update frontend API baseURL to use local backend: http://127.0.0.1:8000/api
+- [x] Build succeeds after API baseURL change
+- [ ] Verify seat booking flow (search → seats → payment) hits local backend
+- [ ] If any endpoint path differs, adjust paths in src/api/api.js accordingly
 
-## Plan Steps:
-- [x] **Updated style.css** ✅
-- [ ] Test full flow: Home search → bus results → seats → payment
-- [ ] Dev server refresh: `cd bus_booking_frontend && npm run dev`
-- [ ] Mark complete
 
-**Current: CSS updated. Test and refresh app!**
+

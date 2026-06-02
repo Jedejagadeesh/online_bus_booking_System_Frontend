@@ -2,22 +2,24 @@ import { useAuth } from "../context/AuthProvider";
 import { useState, useEffect } from "react";
 
 export default function LoginPopup() {
-  const { setShowLogin, setShowSignup, login } = useAuth();
+  const { setShowLogin, setShowSignup, login, showLogin } = useAuth();
 
   const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Reset when modal opens (component stays mounted, but showLogin flips)
+  // Reset when modal opens
   useEffect(() => {
+    if (!showLogin) return;
     setEmail("");
     setPassword("");
     setLoading(false);
     setError("");
     setSuccess("");
-  }, [setShowLogin]);
+  }, [showLogin]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -45,9 +47,14 @@ export default function LoginPopup() {
       setShowLogin(false);
     } catch (err) {
       console.log("LOGIN ERROR:", err.response?.data || err.message);
+      const data = err?.response?.data;
       const msg =
-        err?.response?.data?.error || err?.response?.data || "Login failed";
-      setError(typeof msg === "string" ? msg : "Login failed ❌");
+        (typeof data === "string" && data) ||
+        data?.error ||
+        data?.message ||
+        data?.detail ||
+        "Please enter proper email and password";
+      setError(typeof msg === "string" ? msg : "Please enter proper email and password ❌");
     } finally {
       setLoading(false);
     }

@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthProvider";
 
 
 export default function SignupModal() {
-  const { setShowSignup, setShowLogin } = useAuth();
+  const { setShowSignup, setShowLogin, showSignup } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,15 +13,16 @@ export default function SignupModal() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  // Reset when modal opens (component stays mounted, but showSignup flips)
+  // Reset when modal opens
   useEffect(() => {
+    if (!showSignup) return;
     setName("");
     setEmail("");
     setPassword("");
     setLoading(false);
     setError("");
     setSuccess("");
-  }, [setShowSignup]);
+  }, [showSignup]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -56,9 +57,14 @@ export default function SignupModal() {
       setShowSignup(false);
     } catch (err) {
       console.log("ERROR RESPONSE:", err.response?.data);
+      const data = err?.response?.data;
       const msg =
-        err?.response?.data?.error || err?.response?.data || "Register failed";
-      setError(typeof msg === "string" ? msg : "Register failed ❌");
+        (typeof data === "string" && data) ||
+        data?.error ||
+        data?.message ||
+        data?.detail ||
+        "Please enter valid registration details";
+      setError(typeof msg === "string" ? msg : "Please enter valid registration details ❌");
     } finally {
       setLoading(false);
     }

@@ -15,7 +15,7 @@ export default function Footer() {
         </div>
 
         <p className="copyright">
-          © 2026 Bus Booking System. All Rights Reserved.
+          Bus Booking System. All Rights Reserved.
         </p>
       </div>
     </footer>

@@ -1,8 +1,11 @@
 import axios from "axios";
 
 // ================= BASE API =================
+const apiBaseURL =
+  import.meta.env.VITE_API_BASE_URL || "https://online-bus-booking-system-backend-2m8m.onrender.com/api";
+
 const api = axios.create({
-  baseURL: "https://online-bus-booking-system-backend-2m8m.onrender.com/api",
+  baseURL: apiBaseURL,
 });
 
 // ================= DEBUG INTERCEPTOR (IMPORTANT) =================
@@ -15,8 +18,10 @@ api.interceptors.response.use(
 );
 
 // ================= BUSES =================
-export const searchBuses = (from, to) =>
-  api.get(`/search/?from=${from}&to=${to}`);
+export const searchBuses = (from, to, date) =>
+  axios.get(
+    `https://online-bus-booking-system-backend-2m8m.onrender.com/api/search/?from=${from}&to=${to}&date=${date}`
+  );
 
 export const getBookedSeats = (busId, date) =>
   api.get(`/booked/${busId}/?date=${date}`);

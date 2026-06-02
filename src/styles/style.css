@@ -448,13 +448,25 @@ button:hover {
 .switch-auth span:hover {
   text-decoration: underline;
 }
+.date-input {
+  padding: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  min-width: 180px;
+}
 
+.date-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  transform: scale(1.3);
+}
 /* ====================================================== */
 /* ======================== FOOTER ====================== */
 /* ====================================================== */
 
 .footer {
-  margin-top: 50px;
+  margin-top: 169px;
 
   background: #111;
   color: white;
