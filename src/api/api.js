@@ -1,9 +1,13 @@
 import axios from "axios";
 
+// ================= BASE API =================
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL:
+    import.meta.env.VITE_API_BASE_URL ||
+    "http://127.0.0.1:8000/api",
 });
 
+// ================= DEBUG =================
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -14,25 +18,25 @@ api.interceptors.response.use(
 
 export default api;
 
-// BUSES
+// ================= BUSES =================
 export const searchBuses = (from, to, date) =>
   api.get(`/search/?from=${from}&to=${to}&date=${date}`);
 
 export const getBookedSeats = (busId, date) =>
   api.get(`/booked/${busId}/?date=${date}`);
 
-// BOOKING
+// ================= BOOKING =================
 export const bookSeats = (data) =>
   api.post(`/book/`, data);
 
-// AUTH
+// ================= AUTH =================
 export const loginUser = (data) =>
   api.post(`/login/`, data);
 
 export const signupUser = (data) =>
   api.post(`/register/`, data);
 
-// OTP
+// ================= OTP / PASSWORD =================
 export const forgotPassword = (email) =>
   api.post(`/forgot-password/`, { email });
 
@@ -41,5 +45,3 @@ export const verifyOtpApi = (data) =>
 
 export const resetPasswordApi = (data) =>
   api.post(`/reset-password/`, data);
-
-export default api;
