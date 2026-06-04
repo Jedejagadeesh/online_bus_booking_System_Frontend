@@ -8,10 +8,9 @@
   box-sizing: border-box;
 }
 
-body {
-  background: #f4f6f8;
-  font-family: "Segoe UI", sans-serif;
-  overflow-x: hidden;
+body{
+  background:#f5f7fb;
+  font-family:'Poppins',sans-serif;
 }
 
 .app {
@@ -232,91 +231,738 @@ button:hover {
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
-.seatGrid {
-  width: 320px;
-
+.seats-container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
   padding: 20px;
-
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-
-  gap: 8px;
-
-  border-radius: 18px;
-
-  background: rgb(216,117,112);
 }
 
+
+.legend {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.legend .box {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  margin-right: 5px;
+  border-radius: 3px;
+}
+
+.legend .booked { background: #e53935; }
+.legend .available { background: #ddd; }
+.legend .selected { background: #2196f3; }
 .seat {
-  width: 55px;
-  height: 55px;
-
-  background: #ddd;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-radius: 10px;
-
+  padding: 10px;
+  border-radius: 8px;
+  background: #f1f1f1;
+  text-align: center;
   cursor: pointer;
-
-  transition: 0.2s;
 }
+
 
 .seat:hover {
   transform: scale(1.05);
 }
 
 .seat.selected {
-  background: #2196f3;
+  background: green;
   color: white;
 }
 
 .seat.booked {
-  background: #e53935;
-  color: white;
+  background: red;
   cursor: not-allowed;
 }
 
 .seat-btn {
   margin-top: 25px;
 }
+.switch-auth{
+  margin-top:20px;
+  text-align:center;
+  font-size:15px;
+  color:#6b7280;
+}
 
+.switch-auth span{
+  color:#2563eb;
+  font-weight:600;
+}
+.modal-overlay{
+  position:fixed;
+  inset:0;
+
+  background:linear-gradient(
+    135deg,
+    rgba(37,99,235,.25),
+    rgba(79,70,229,.25)
+  );
+
+  backdrop-filter:blur(5px);
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  z-index:999;
+}
+
+.modal-card{
+  width:100%;
+  max-width:340px;
+
+  background:white;
+
+  padding:28px;
+
+  border-radius:22px;
+
+  box-shadow:
+  0 20px 40px rgba(0,0,0,.15);
+
+  position:relative;
+}
+
+.modal-card h2{
+  text-align:center;
+  margin-bottom:20px;
+
+  font-size:28px;
+  font-weight:700;
+
+  color:#111827;
+}
+
+.close-btn{
+  position:absolute;
+  right:15px;
+  top:15px;
+
+  font-size:18px;
+
+  cursor:pointer;
+
+  color:#6b7280;
+}
+
+.close-btn:hover{
+  color:#ef4444;
+}
+
+.modal-card label{
+  display:block;
+
+  margin-bottom:6px;
+
+  font-size:14px;
+  font-weight:600;
+
+  color:#374151;
+}
+
+.required{
+  color:red;
+}
+
+.modal-card input{
+  width:100%;
+
+  padding:13px;
+
+  margin-bottom:15px;
+
+  border:2px solid #e5e7eb;
+
+  border-radius:12px;
+
+  font-size:15px;
+}
+
+.modal-card input:focus{
+  outline:none;
+
+  border-color:#2563eb;
+
+  box-shadow:
+  0 0 0 4px rgba(37,99,235,.12);
+}
+
+.modal-card button{
+  width:100%;
+
+  padding:13px;
+
+  border:none;
+
+  border-radius:12px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #2563eb,
+    #4f46e5
+  );
+
+  color:white;
+
+  font-size:16px;
+  font-weight:600;
+}
+
+.modal-card button:hover{
+  transform:translateY(-2px);
+}
+
+.auth-footer{
+  text-align:center;
+
+  margin-top:15px;
+
+  font-size:14px;
+}
+
+.auth-footer span{
+  color:#2563eb;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.forgot-link{
+  text-align:right;
+
+  margin-bottom:15px;
+
+  color:#2563eb;
+
+  font-size:13px;
+
+  cursor:pointer;
+
+  font-weight:600;
+}
+/* ====================================================== */
+/* ==================== SEAT SECTION ==================== */
+/* ====================================================== */
+
+.seat_main {
+  max-width: 750px;
+  margin: 30px auto;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* TITLE */
+.seat_main h2 {
+  margin-bottom: 10px;
+  color: #e53935;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* LEGEND */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin: 15px 0;
+  font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.legend .box {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  margin-right: 6px;
+  border-radius: 3px;
+}
+
+.legend .booked {
+  background: red;
+}
+
+.legend .available {
+  background: #ddd;
+}
+
+.legend .selected {
+  background: green;
+}
+
+/* GRID */
+.seatGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  justify-items: center;
+  margin-top: 20px;
+}
+
+/* SEAT WRAPPER */
+.Seat_booking {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SEAT BOX */
+.seat {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background: #eaeaea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.seat:hover {
+  transform: scale(1.08);
+  background: #d6d6d6;
+}
+
+/* STATES */
+.seat.booked {
+  background: #e53935;
+  color: white;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.seat.selected {
+  background: #2e7d32;
+  color: white;
+}
+
+/* BUTTON */
+.seat_payment {
+  margin-top: 35px;   /* ✅ FIX GAP ISSUE */
+  padding: 14px 24px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+}
+
+.seat_payment:hover {
+  transform: translateY(-2px);
+}
+
+/* ====================================================== */
+/* ================= RESPONSIVE ========================= */
+/* ====================================================== */
+
+@media (max-width: 768px) {
+  .seatGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .seat {
+    width: 40px;
+    height: 40px;
+    font-size: 12px;
+  }
+
+  .seat_main {
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .seatGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .seat {
+    width: 38px;
+    height: 38px;
+  }
+}
+/* ====================================================== */
+/* ====================== TICKET ======================== */
+/* ====================================================== */
+
+.ticket-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
+
+.ticket-card {
+  display: flex;
+  width: 650px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  border-left: 8px solid #e53935;
+  overflow: hidden;
+}
+
+.ticket-left {
+  flex: 1;
+  padding: 25px;
+}
+
+.ticket-title {
+  color: #e53935;
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.ticket-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed #ddd;
+}
+
+.ticket-row span {
+  color: #666;
+}
+
+.ticket-price {
+  margin-top: 15px;
+  font-weight: bold;
+  color: green;
+}
+
+.safe-msg {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.ticket-right {
+  width: 180px;
+  background: #f5f7fb;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-left: 1px dashed #ccc;
+}
 /* ====================================================== */
 /* ====================== PAYMENT ======================= */
 /* ====================================================== */
 
+/* ====================================================== */
+/* ==================== PAYMENT BOX ===================== */
+/* ====================================================== */
+
 .paymentBox {
   width: 420px;
+  margin: 50px auto;
+  background: #ffffff;
 
-  margin: 40px auto;
+  padding: 30px 25px;
 
-  background: white;
-
-  padding: 30px;
-
-  border-radius: 20px;
+  border-radius: 18px;
 
   text-align: center;
 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+
+  font-family: "Poppins", "Segoe UI", sans-serif;
 }
 
+/* TITLE */
+.paymentBox h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #2563eb;
+  letter-spacing: 0.5px;
+}
+
+/* INPUTS */
 .paymentBox input {
   width: 100%;
 
   padding: 14px;
-
   margin: 10px 0;
 
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
 
   outline: none;
+
+  font-size: 16px;
+  font-weight: 500;
+
+  font-family: "Poppins", sans-serif;
+
+  transition: 0.2s ease;
 }
 
+.paymentBox input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+/* INFO TEXT */
+.paymentBox p {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 8px 0;
+  color: #444;
+}
+
+/* STRONG INFO (seat/date/total highlight) */
+.paymentBox p:nth-child(n) {
+  letter-spacing: 0.3px;
+}
+
+/* BUTTON */
+.paymentBox button {
+  width: 100%;
+  margin-top: 18px;
+
+  padding: 14px 16px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+
+  color: white;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  font-family: "Poppins", sans-serif;
+
+  cursor: pointer;
+
+  letter-spacing: 1px;   /* 🔥 SPACE IMPROVEMENT */
+  transition: all 0.25s ease;
+}
+
+/* HOVER EFFECT */
+.paymentBox button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37,99,235,0.25);
+}
+
+/* DISABLED LOOK (loading state) */
+.paymentBox button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+/* ================= HOME HERO ================= */
+
+.home-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.hero {
+  margin: 20px 0;
+}
+
+.hero h1 {
+  font-size: 34px;
+  font-weight: 800;
+  color: #e53935;
+  letter-spacing: 1px;
+}
+
+.hero p {
+  font-size: 16px;
+  color: #555;
+  margin-top: 6px;
+}
+
+/* ================= SEARCH BOX ================= */
+
+.searchBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+
+  width: fit-content;
+  margin: 20px auto;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.searchBox input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+
+  min-width: 160px;
+}
+
+.searchBox input:focus {
+  border-color: #2563eb;
+}
+
+.searchBox button {
+  padding: 12px 18px;
+  border-radius: 10px;
+
+  background: linear-gradient(135deg, #e53935, #ff5252);
+  color: white;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.arrow {
+  font-size: 22px;
+  font-weight: bold;
+  color: #555;
+}
+
+/* ================= EMPTY STATE ================= */
+
+.empty-state {
+  margin-top: 20px;
+  padding: 20px;
+
+  background: #fff3f3;
+  color: #c62828;
+
+  font-weight: bold;
+  border-radius: 12px;
+}
+/* ====================================================== */
+/* ==================== SEARCH BOX ====================== */
+/* ====================================================== */
+
+.searchBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 12px;
+
+  background: white;
+
+  padding: 18px;
+
+  border-radius: 16px;
+
+  width: fit-content;
+  margin: 25px auto;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+
+  flex-wrap: wrap;
+}
+
+/* INPUTS - SAME WIDTH + HEIGHT */
+.searchBox input {
+  width: 180px;
+  height: 48px;
+
+  padding: 0 12px;
+
+  border-radius: 10px;
+  border: 1px solid #ddd;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  outline: none;
+
+  transition: 0.2s ease;
+}
+
+/* INPUT FOCUS */
+.searchBox input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+/* DATE INPUT */
+.searchBox input[type="date"] {
+  cursor: pointer;
+}
+
+/* ARROW ICON */
+.arrow {
+  font-size: 20px;
+  font-weight: bold;
+  color: #6b7280;
+}
+
+/* SEARCH BUTTON */
+.searchBox button {
+  height: 48px;
+
+  padding: 0 18px;
+
+  border-radius: 10px;
+
+  border: none;
+
+  background: linear-gradient(135deg, #ff4d4d, #e53935);
+
+  color: white;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+
+  letter-spacing: 0.5px;
+}
+
+/* BUTTON HOVER */
+.searchBox button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(229,57,53,0.3);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .searchBox {
+    width: 95%;
+  }
+
+  .searchBox input {
+    width: 100%;
+  }
+
+  .searchBox button {
+    width: 100%;
+  }
+}
 /* ====================================================== */
 /* ======================== MODAL ======================= */
 /* ====================================================== */
@@ -338,37 +984,59 @@ button:hover {
   animation: fadeIn 0.2s ease;
 }
 
-.modal-card {
-  width: 100%;
-  max-width: 420px;
+.modal-card input{
+  width:100%;
 
-  background: white;
+  padding:15px;
 
-  padding: 28px 24px;
+  margin-bottom:18px;
 
-  border-radius: 20px;
+  border:2px solid #e5e7eb;
 
-  position: relative;
+  border-radius:12px;
 
-  display: flex;
-  flex-direction: column;
+  font-size:16px;
+  font-weight:500;
 
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-
-  animation: popup 0.2s ease;
+  transition:.3s;
 }
 
-.modal-card h2 {
-  text-align: center;
+.modal-card input:focus{
+  border-color:#2563eb;
+  box-shadow:0 0 0 4px rgba(37,99,235,.15);
+}
+.modal-card button{
+  width:100%;
 
-  color: #16a34a;
+  padding:15px;
 
-  margin-bottom: 24px;
+  border:none;
 
-  font-size: 34px;
-  font-family: "Times New Roman", serif;
+  border-radius:12px;
+
+  background:linear-gradient(
+  135deg,
+  #2563eb,
+  #4f46e5
+  );
+
+  color:white;
+
+  font-size:17px;
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:.3s;
 }
 
+.modal-card button:hover{
+  transform:translateY(-2px);
+}
+.required{
+  color:red;
+  margin-left:3px;
+}
 .close-btn {
   position: absolute;
   top: 14px;
@@ -475,7 +1143,69 @@ button:hover {
 
   padding: 20px;
 }
+/* ====================================================== */
+/* ======================= FOOTER ======================= */
+/* ====================================================== */
 
+.footer {
+  margin-top: 60px;
+
+  background: linear-gradient(135deg, #111827, #1f2937);
+
+  color: #e5e7eb;
+
+  text-align: center;
+
+  padding: 35px 20px;
+
+  font-family: "Poppins", sans-serif;
+
+  border-top: 4px solid #e53935;
+}
+
+/* TITLE / BRAND */
+.footer h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+/* SUB TEXT */
+.footer p {
+  font-size: 14px;
+  color: #cbd5e1;
+  margin: 6px 0;
+}
+
+/* CONTACT INFO */
+.footer .contact {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.footer .contact span {
+  display: block;
+  margin: 4px 0;
+  color: #e2e8f0;
+}
+
+/* ICON STYLE (if you use icons later) */
+.footer i {
+  margin-right: 6px;
+  color: #ff5252;
+}
+
+/* COPYRIGHT */
+.footer .copyright {
+  margin-top: 18px;
+  font-size: 13px;
+  color: #94a3b8;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 12px;
+}
 /* ====================================================== */
 /* ====================== ANIMATION ===================== */
 /* ====================================================== */
@@ -625,4 +1355,113 @@ button:hover {
   .footer {
     font-size: 12px;
   }
+}
+/* ================= BOOKING PAGE WRAPPER ================= */
+
+.booking-container {
+  padding: 25px;
+  text-align: center;
+}
+
+.booking-container h2 {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #e53935;
+}
+
+/* ================= LIST FLEX ROW ================= */
+
+.booking-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  justify-content: center;
+  align-items: flex-start;
+
+  gap: 20px;   /* 🔥 your requirement */
+
+  padding: 10px;
+}
+
+/* ================= BOOKING CARD ================= */
+
+.booking-card {
+  width: 320px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  background: #ffffff;
+  border-radius: 16px;
+
+  padding: 18px;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+
+  transition: 0.25s ease;
+
+  text-align: left;
+}
+
+.booking-card:hover {
+  transform: translateY(-5px);
+}
+
+/* ================= TEXT STYLE ================= */
+
+.booking-card h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: #2563eb;
+}
+
+.booking-card p {
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* ================= STATUS ================= */
+
+.booking-card p:last-of-type {
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+/* ================= TRACK BUTTON ================= */
+
+.track-btn {
+  margin-top: 10px;
+
+  padding: 10px 14px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(135deg, #ff4d4d, #e53935);
+  color: white;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.track-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(229,57,53,0.3);
+}
+
+/* ================= EMPTY STATE ================= */
+
+.booking-container p {
+  font-size: 15px;
+  font-weight: 600;
+  color: #777;
 }

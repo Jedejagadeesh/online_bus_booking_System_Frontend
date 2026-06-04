@@ -1,57 +1,65 @@
 import React from "react";
-// import "../style.css";   // ✅
+import { QRCodeCanvas } from "qrcode.react";
+import "../styles/style.css";
 
 export default function Ticket({ data }) {
+
+  if (!data || !data.bus) return null;
+
+  const seats = Array.isArray(data.seats)
+    ? data.seats
+    : String(data.seats).split(",");
+
   return (
-    <div className="ticket-container">
+    <div className="ticket-wrapper">
+
       <div className="ticket-card">
 
-        <h2 className="ticket-title">🎫 Booking Confirmed</h2>
+        {/* LEFT SIDE */}
+        <div className="ticket-left">
 
-        <div className="ticket-row">
-          <span>Ticket No:</span>
-          <strong>{data.ticketNo}</strong>
+          <h2 className="ticket-title">🎫 Booking Confirmed</h2>
+
+          <div className="ticket-row">
+            <span>Bus:</span>
+            <strong>{data.bus.bus_number || data.bus.bus_name}</strong>
+          </div>
+
+          <div className="ticket-row">
+            <span>From:</span>
+            <strong>{data.bus.source}</strong>
+          </div>
+
+          <div className="ticket-row">
+            <span>To:</span>
+            <strong>{data.bus.destination}</strong>
+          </div>
+
+          <div className="ticket-row">
+            <span>Seats:</span>
+            <strong className="seat-badge">
+              {seats.length > 1
+                ? `Your seats nos are ${seats.join(", ")}`
+                : `Your seat no is ${seats[0]}`}
+            </strong>
+          </div>
+
+          <div className="safe-msg">
+            🚍 Have a safe journey
+          </div>
+
         </div>
 
-        <hr />
+        {/* RIGHT SIDE QR */}
+        <div className="ticket-right">
 
-        <div className="ticket-row">
-          <span>🚌 Bus Name:</span>
-          <strong>{data.bus.bus_name || "Express Bus"}</strong>
-        </div>
+          <QRCodeCanvas
+            value={`Bus:${data.bus.bus_number}|Seats:${seats.join(",")}`}
+            size={120}
+          />
 
-        <div className="ticket-row">
-          <span>📍 From:</span>
-          <strong>{data.bus.source}</strong>
-        </div>
+          <p>Scan for details</p>
 
-        <div className="ticket-row">
-          <span>📍 To:</span>
-          <strong>{data.bus.destination}</strong>
-        </div>
-
-        <div className="ticket-row">
-          <span>⏰ Departure:</span>
-          <strong>{data.bus.departure || "06:00 AM"}</strong>
-        </div>
-
-        <div className="ticket-row">
-          <span>⏰ Arrival:</span>
-          <strong>{data.bus.arrival || "10:00 AM"}</strong>
-        </div>
-
-        <div className="ticket-row">
-          <span>💰 Price:</span>
-          <strong>₹{data.bus.price}</strong>
-        </div>
-
-        <div className="ticket-row">
-          <span>💺 Your_Seat_No:</span>
-          <strong>{data.seats}</strong>
-        </div>
-
-        <div className="ticket-footer"style={{fontSize:"20px"}}>
-          🚍 Have a Safe Journey
         </div>
 
       </div>

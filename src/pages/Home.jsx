@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { searchBuses as searchBusesApi } from "../api/api";
 import BusCard from "../components/BusCard";
 import "../styles/style.css";
 
@@ -16,10 +16,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const res = await axios.get(
-        `http://127.0.0.1:8000/api/search/?from=${from}&to=${to}&date=${journeyDate}`
-      );
-
+      const res = await searchBusesApi(from, to, journeyDate);
       setBuses(res.data.routes || []);
     } catch (err) {
       console.log(err);

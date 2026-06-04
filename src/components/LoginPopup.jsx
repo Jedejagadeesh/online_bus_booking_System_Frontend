@@ -2,131 +2,187 @@ import { useAuth } from "../context/AuthProvider";
 import { useState, useEffect } from "react";
 
 export default function LoginPopup() {
-  const { setShowLogin, setShowSignup, login, showLogin } = useAuth();
 
-  const [email, setEmail] = useState("");
+ const {
+  setShowLogin,
+  setShowSignup,
+  setShowForgotPassword,
+  login,
+  showLogin
+} = useAuth();
 
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [email,setEmail] = useState("");
+  const [password,setPassword] = useState("");
 
-  // Reset when modal opens
+  const [loading,setLoading] = useState(false);
+  const [error,setError] = useState("");
+  const [success,setSuccess] = useState("");
+
   useEffect(() => {
-    if (!showLogin) return;
+
+    if(!showLogin) return;
+
     setEmail("");
     setPassword("");
-    setLoading(false);
     setError("");
     setSuccess("");
-  }, [showLogin]);
+    setLoading(false);
+
+  },[showLogin]);
 
   useEffect(() => {
+
     const onKeyDown = (e) => {
-      if (e.key === "Escape") {
+
+      if(e.key === "Escape"){
         setShowLogin(false);
       }
+
     };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [setShowLogin]);
+
+    window.addEventListener("keydown",onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown",onKeyDown);
+    };
+
+  },[setShowLogin]);
 
   const handleLogin = async () => {
+
     setError("");
     setSuccess("");
 
-    if (!email || !password) {
+    if(!email || !password){
+
       setError("Please enter email and password");
       return;
+
     }
 
-    try {
-      setLoading(true);
-      await login(email, password);
-      setSuccess("Login successful ✅");
-      setShowLogin(false);
-    } catch (err) {
-      console.log("LOGIN ERROR:", err.response?.data || err.message);
+    try{
+
+  setLoading(true);
+
+  await login(email,password);
+
+  setSuccess("Login successful ✅");
+
+  alert("Login Successful ✅");
+
+  setTimeout(() => {
+    setShowLogin(false);
+  },500);
+
+}catch(err){
+
+      console.log(err);
+
       const data = err?.response?.data;
+
       const msg =
-        (typeof data === "string" && data) ||
         data?.error ||
         data?.message ||
         data?.detail ||
-        "Please enter proper email and password";
-      setError(typeof msg === "string" ? msg : "Please enter proper email and password ❌");
-    } finally {
+        "Please enter correct password";
+
+      setError(msg);
+
+    }finally{
+
       setLoading(false);
+
     }
   };
 
   return (
+
     <div
       className="modal-overlay"
-      onMouseDown={(e) => {
-        if (e.target === e.currentTarget) setShowLogin(false);
-      }}
+      onClick={() => setShowLogin(false)}
     >
-      <div className="modal-card" role="dialog" aria-modal="true" aria-label="Login">
-        <h2>Login</h2>
 
-        <p
-          style={{
-            cursor: "pointer",
-            color: "black",
-            textAlign: "right",
-            fontSize: "30px",
-          }}
+      <div
+        className="modal-card"
+        onClick={(e)=>e.stopPropagation()}
+      >
+
+        <div
+          className="close-btn"
           onClick={() => setShowLogin(false)}
-          aria-label="Close"
         >
-          <i className="fa-solid fa-circle-xmark"></i>
-        </p>
+          <i className="fa-solid fa-xmark"></i>
+        </div>
+
+        <h2>Welcome Back</h2>
 
         {error && (
-          <div style={{ color: "#b00020", fontWeight: "bold", marginBottom: 10 }}>
+          <div className="error-msg">
             {error}
           </div>
         )}
+
         {success && (
-          <div style={{ color: "#1b5e20", fontWeight: "bold", marginBottom: 10 }}>
+          <div className="success-msg">
             {success}
           </div>
         )}
 
+        <label>
+          Email <span className="required">*</span>
+        </label>
+
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Enter your email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e)=>setEmail(e.target.value)}
           disabled={loading}
         />
+
+        <label>
+          Password <span className="required">*</span>
+        </label>
 
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Enter your password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e)=>setPassword(e.target.value)}
           disabled={loading}
         />
 
-        <button onClick={handleLogin} disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
+        <div
+  className="forgot-link"
+  onClick={()=>{
+    setShowLogin(false);
+    setShowForgotPassword(true);
+  }}
+>
+  Forgot Password?
+</div>
+
+        <button
+          onClick={handleLogin}
+          disabled={loading}
+        >
+          {loading ? "Logging In..." : "Login"}
         </button>
 
-        <p>
+        <div className="auth-footer">
           New user?{" "}
           <span
-            style={{ cursor: "pointer", color: "blue" }}
-            onClick={() => {
+            onClick={()=>{
               setShowLogin(false);
               setShowSignup(true);
             }}
           >
             Register
           </span>
-        </p>
+        </div>
+
       </div>
+
     </div>
   );
 }

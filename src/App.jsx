@@ -16,7 +16,7 @@ import LoginPopup from "./components/LoginPopup";
 import SignupModal from "./components/SignupModal";
 
 import { useAuth } from "./context/AuthProvider";
-
+import ForgotPassword from "./components/ForgotPassword";
 import "./styles/style.css";
 
 export default function App() {
@@ -25,6 +25,7 @@ export default function App() {
     showSignup,
     isAuthenticated,
     setShowLogin,
+    showForgotPassword,
     setShowSignup
   } = useAuth();
 
@@ -45,27 +46,30 @@ export default function App() {
 
   // ================= SEARCH FUNCTION =================
   const handleSearch = async () => {
-    if (!isAuthenticated()) {
-      alert("Please login first to search buses");
-      setShowLogin(true);
-      return;
-    }
+  if (!isAuthenticated()) {
+    alert("Please login first to search buses");
+    setShowLogin(true);
+    return;
+  }
 
-    if (!from || !to) {
-      alert("Enter From & To");
-      return;
-    }
+  if (!from || !to) {
+    alert("Enter From & To");
+    return;
+  }
 
-    try {
-      const res = await searchBuses(from, to, date);
-      setBuses(res.data.routes || []);
-      setStep("search");
-    } catch (err) {
-      console.error(err);
-      alert("Error fetching buses");
-    }
-  };
+  try {
+    const res = await searchBuses(from, to, date);
 
+    console.log("API Response:", res.data);
+
+    setBuses(res.data);
+
+    setStep("search");
+  } catch (err) {
+    console.error(err);
+    alert("Error fetching buses");
+  }
+};
   // ================= LOGIN CLOSE RESET =================
   const closeLogin = () => {
     setShowLogin(false);
@@ -76,119 +80,118 @@ export default function App() {
   };
 
   return (
-    <div className="app">
+  <div className="app">
 
-      {/* ================= NAVBAR ================= */}
-      <Navbar onNavigate={setPage} />
+  {/* ================= NAVBAR ================= */}
+  <Navbar onNavigate={setPage} />
 
-      {/* ================= HOME ================= */}
-      {page === "home" && (
-        <>
-          {/* SEARCH BOX */}
-          <div className="searchBox">
+  {/* ================= HOME ================= */}
+  {page === "home" && (
+    <div className="home-container">
 
-            <input
-              placeholder="From"
-              value={from}
-              onChange={(e) => setFrom(e.target.value)}
-              style={{fontSize:"20px",fontWeight:"bold"}}
-            />
-<i className="fa-solid fa-arrow-right" style={{fontSize:"20px",fontWeight:"bold",position:"relative",top:"18px"}}></i>
-            <input
-              placeholder="To"
-              value={to}
-              onChange={(e) => setTo(e.target.value)}
-                style={{fontSize:"20px",fontWeight:"bold"}}
-            />
+      {/* HERO TITLE */}
+      <div className="hero">
+        <h1>🚌 Bus Booking System</h1>
+        <p>Fast • Safe • Reliable Travel Booking</p>
+      </div>
 
-            <input
-  type="date"
-  value={date}
-  min={today}
-  onChange={(e) => setDate(e.target.value)}
-  style={{
-    fontSize: "20px",
-    fontWeight: "bold",
-    height: "50px",
-    padding: "8px 12px",
-    borderRadius: "8px",
-    cursor: "pointer"
-  }}
-/>
+      {/* SEARCH BOX */}
+      <div className="searchBox">
 
-            <button onClick={handleSearch}
-              style={{fontSize:"20px",fontWeight:"bold",position:"relative",bottom:"10px"}}>
-              Search Buses
-            </button>
-          </div>
+        <input
+          placeholder="From"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
 
-          {/* BUS LIST */}
-          {step === "search" && (
-            <div className="busContainer">
-              {buses.length === 0 ? (
-               <p style={{fontWeight:"bold"}}>🚍 No buses available. Please search your buses using another route or time.</p>
-              ) : (
-                buses.map((bus, i) => (
-                  <BusCard
-                    key={i}
-                    bus={bus}
-                    onSelect={(b) => {
-                      if (!isAuthenticated()) {
-                        alert("Please login first");
-                        setShowLogin(true);
-                        return;
-                      }
+        <div className="arrow">➜</div>
 
-                      setSelectedBus(b);
-                      setStep("seat");
-                    }}
-                  />
-                ))
-              )}
+        <input
+          placeholder="To"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+        />
+
+        <input
+          type="date"
+          value={date}
+          min={today}
+          onChange={(e) => setDate(e.target.value)}
+        />
+
+        <button onClick={handleSearch}>
+          Search Buses
+        </button>
+
+      </div>
+
+      {/* BUS LIST */}
+      {step === "search" && (
+        <div className="busContainer">
+
+          {buses.length === 0 ? (
+            <div className="empty-state">
+              🚍 No buses available. Try another route or time.
             </div>
+          ) : (
+            buses.map((bus, i) => (
+              <BusCard
+                key={i}
+                bus={bus}
+                onSelect={(b) => {
+                  if (!isAuthenticated()) {
+                    alert("Please login first");
+                    setShowLogin(true);
+                    return;
+                  }
+
+                  setSelectedBus(b);
+                  setStep("seat");
+                }}
+              />
+            ))
           )}
 
-          {/* SEAT */}
-          {step === "seat" && (
-            <SeatLayout
-              bus={selectedBus}
-              date={date}
-              onNext={() => setStep("payment")}
-            />
-          )}
-
-          {/* PAYMENT */}
-          {step === "payment" && (
-            <Payment
-              bus={selectedBus}
-              date={date}
-              onSuccess={(ticketData) => {
-                setTicket(ticketData);
-                setStep("ticket");
-              }}
-            />
-          )}
-
-          {/* TICKET */}
-          {step === "ticket" && <Ticket data={ticket} />}
-        </>
+        </div>
       )}
 
-      {/* ================= OTHER PAGES ================= */}
-      {page === "bookings" && <MyBookings />}
-      {page === "track" && <Track />}
-
-      {/* ================= AUTH MODALS (FIXED) ================= */}
-      {showLogin && (
-        <LoginPopup onClose={closeLogin} />
+      {/* FLOW */}
+      {step === "seat" && (
+        <SeatLayout
+          bus={selectedBus}
+          date={date}
+          onNext={() => setStep("payment")}
+        />
       )}
 
-      {showSignup && (
-        <SignupModal onClose={closeSignup} />
+      {step === "payment" && (
+        <Payment
+          bus={selectedBus}
+          date={date}
+          onSuccess={(ticketData) => {
+            setTicket(ticketData);
+            setStep("ticket");
+          }}
+        />
       )}
 
-      {/* ================= FOOTER ================= */}
-      <Footer/>
+      {step === "ticket" && <Ticket data={ticket} />}
+
     </div>
+  )}
+
+  {/* OTHER PAGES */}
+  {page === "bookings" && <MyBookings />}
+  {page === "track" && <Track />}
+
+  {/* AUTH */}
+  {showLogin && <LoginPopup onClose={() => setShowLogin(false)} />}
+  {showSignup && <SignupModal onClose={() => setShowSignup(false)} />}
+  {showForgotPassword && <ForgotPassword />}
+
+  {/* FOOTER */}
+  <Footer />
+
+</div>
   );
 }

@@ -1,14 +1,9 @@
 import axios from "axios";
 
-// ================= BASE API =================
-const apiBaseURL =
-  import.meta.env.VITE_API_BASE_URL || "https://online-bus-booking-system-backend-2m8m.onrender.com/api";
-
 const api = axios.create({
-  baseURL: apiBaseURL,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
-// ================= DEBUG INTERCEPTOR (IMPORTANT) =================
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -17,36 +12,34 @@ api.interceptors.response.use(
   }
 );
 
-// ================= BUSES =================
+export default api;
+
+// BUSES
 export const searchBuses = (from, to, date) =>
-  axios.get(
-    `https://online-bus-booking-system-backend-2m8m.onrender.com/api/search/?from=${from}&to=${to}&date=${date}`
-  );
+  api.get(`/search/?from=${from}&to=${to}&date=${date}`);
 
 export const getBookedSeats = (busId, date) =>
   api.get(`/booked/${busId}/?date=${date}`);
 
-// ================= BOOKING =================
-export const bookSeats = async (data) => {
-  try {
-    console.log("Booking Request Data:", data);
+// BOOKING
+export const bookSeats = (data) =>
+  api.post(`/book/`, data);
 
-    const res = await api.post(`/book/`, data);
-
-    console.log("Booking Success:", res.data);
-    return res.data;
-
-  } catch (error) {
-    console.log("Booking Failed:", error.response?.data || error.message);
-    throw error;
-  }
-};
-
-// ================= AUTH =================
-export const loginUser = (email, password) =>
-  api.post(`/login/`, { email, password });
+// AUTH
+export const loginUser = (data) =>
+  api.post(`/login/`, data);
 
 export const signupUser = (data) =>
   api.post(`/register/`, data);
+
+// OTP
+export const forgotPassword = (email) =>
+  api.post(`/forgot-password/`, { email });
+
+export const verifyOtpApi = (data) =>
+  api.post(`/verify-otp/`, data);
+
+export const resetPasswordApi = (data) =>
+  api.post(`/reset-password/`, data);
 
 export default api;

@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { getBookedSeats } from "../api/api";
 
 export default function SeatLayout({ bus, date, onNext }) {
+  const totalSeats = 40;
   const [booked, setBooked] = useState([]);
   const [selected, setSelected] = useState([]);
+  
 const selectedDate = localStorage.getItem("journey_date");
  useEffect(() => {
   if (!selectedDate) return;
@@ -30,31 +32,32 @@ const selectedDate = localStorage.getItem("journey_date");
   return (
     <div className="seat_main">
       <h2>Select Seats</h2>
-
+      {/* ✅ LEGEND HERE */}
+    <div className="legend">
+      <div><span className="box booked"></span> Booked</div>
+      <div><span className="box available"></span> Available</div>
+      <div><span className="box selected"></span> Selected</div>
+    </div>
       <div className="seatGrid" >
-        {[...Array(20)].map((_, i) => {
-          const seat = i + 1;   // ✅ seat defined HERE
+        {[...Array(totalSeats)].map((_, i) => {
+  const seat = String(i + 1);
 
-          const isBooked = booked.includes(String(seat));
-          const isSelected = selected.includes(String(seat));
+  const isBooked = booked.includes(seat);
+  const isSelected = selected.includes(seat);
 
-          return (
-            <div key={seat} className="Seat_booking">
-              <div
-                onClick={() => toggleSeat(String(seat))}
-                className={`seat ${
-                  isBooked
-                    ? "booked"
-                    : isSelected
-                    ? "selected"
-                    : ""
-                }`}
-              >
-                {seat}
-              </div>
-            </div>
-          );
-        })}
+  return (
+    <div key={seat} className="Seat_booking">
+      <div
+        onClick={() => toggleSeat(seat)}
+        className={`seat ${
+          isBooked ? "booked" : isSelected ? "selected" : ""
+        }`}
+      >
+        {seat}
+      </div>
+    </div>
+  );
+})}
       </div>
 
       <button
