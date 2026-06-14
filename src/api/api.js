@@ -18,7 +18,9 @@ export default api;
 
 // ================= BUSES =================
 export const searchBuses = (from, to, date) =>
-  api.get(`/search/?from=${from}&to=${to}&date=${date || ""}`);
+  api.get(
+    `/search/?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${date || ""}`
+  );
 
 export const getBookedSeats = (busId, date) =>
   api.get(`/booked/${busId}/?date=${date || ""}`);

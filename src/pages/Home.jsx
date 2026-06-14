@@ -1,29 +1,28 @@
-<div className="search-box">
-  <input
-    type="text"
-    placeholder="📍 From"
-    value={from}
-    onChange={(e) => setFrom(e.target.value)}
-  />
+const searchBuses = async () => {
+  if (!from || !to) {
+    alert("Please enter From and To locations");
+    return;
+  }
 
-  <input
-    type="text"
-    placeholder="📍 To"
-    value={to}
-    onChange={(e) => setTo(e.target.value)}
-  />
+  setLoading(true);
 
-  <input
-    type="date"
-    value={journeyDate}
-    min={new Date().toISOString().split("T")[0]}
-    onChange={(e) => setJourneyDate(e.target.value)}
-  />
+  try {
+    const cleanFrom = from.trim();
+    const cleanTo = to.trim();
 
-  <button
-    className="search-btn"
-    onClick={searchBuses}
-  >
-    🔍 Search Buses
-  </button>
-</div>
+    const res = await searchBusesApi(
+      cleanFrom,
+      cleanTo,
+      journeyDate
+    );
+
+    console.log("API Response:", res.data);
+
+    setBuses(Array.isArray(res.data) ? res.data : []);
+  } catch (err) {
+    console.log("SEARCH ERROR:", err);
+    setBuses([]);
+  }
+
+  setLoading(false);
+};
