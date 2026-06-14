@@ -135,7 +135,141 @@
       width: 18px;
     }
   }
+/* Navbar */
+.navbar {
+  background: #d84a4a;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
 
+/* Search Box */
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background: white;
+  padding: 20px;
+  margin: 25px auto;
+  max-width: 1200px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-box input {
+  flex: 1;
+  min-width: 220px;
+  padding: 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+}
+
+.search-box input:focus {
+  border-color: #d84a4a;
+}
+
+.search-btn {
+  background: #d84a4a;
+  color: white;
+  border: none;
+  padding: 14px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.search-btn:hover {
+  background: #c0392b;
+}
+
+/* Results */
+.results {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Bus List */
+.bus-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* Bus Card */
+.bus-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bus-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  color: #d84a4a;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.bus-route {
+  margin: 15px 0;
+  font-size: 18px;
+}
+
+.bus-info p {
+  margin: 8px 0;
+}
+
+.select-btn {
+  width: 100%;
+  background: #d84a4a;
+  color: white;
+  border: none;
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.select-btn:hover {
+  background: #c0392b;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  background: #f5f5f5;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .search-box {
+    flex-direction: column;
+  }
+
+  .search-box input,
+  .search-btn {
+    width: 100%;
+  }
+
+  .navbar {
+    font-size: 20px;
+  }
+}
   @media (max-width: 1024px) {
     margin-top: 20px;
     flex-wrap: wrap;
