@@ -2,7 +2,7 @@ import axios from "axios";
 
 // ================= BASE API =================
 const api = axios.create({
-  baseURL: "https://online-bus-booking-system-backend-2m8m.onrender.com/api",
+  baseURL: "http://65.0.45.188:8000/api",
 });
 
 // ================= DEBUG =================
