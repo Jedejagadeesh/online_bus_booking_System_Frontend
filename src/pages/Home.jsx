@@ -12,38 +12,40 @@ export default function Home() {
   const [buses, setBuses] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const searchBuses = async () => {
-    if (!from || !to) {
-      alert("Please enter From and To locations");
-      return;
-    }
+const searchBuses = async () => {
+  alert(`Searching: ${from} -> ${to}`);
 
-    setLoading(true);
+  if (!from.trim() || !to.trim()) {
+    alert("Please enter From and To locations");
+    return;
+  }
 
-    try {
-      const cleanFrom = from.trim();
-      const cleanTo = to.trim();
+  setLoading(true);
 
-      const res = await searchBusesApi(
-        cleanFrom,
-        cleanTo,
-        journeyDate
-      );
+  try {
+    const res = await searchBusesApi(
+      from.trim(),
+      to.trim(),
+      journeyDate
+    );
 
-      console.log("API Response:", res.data);
+    alert(`Found: ${Array.isArray(res.data) ? res.data.length : 0} buses`);
 
-      setBuses(
-        Array.isArray(res.data)
-          ? res.data
-          : res.data.routes || []
-      );
-    } catch (err) {
-      console.log("SEARCH ERROR:", err);
+    if (Array.isArray(res.data)) {
+      setBuses(res.data);
+    } else if (res.data?.routes) {
+      setBuses(res.data.routes);
+    } else {
       setBuses([]);
     }
-
+  } catch (err) {
+    alert("Search API Error");
+    console.error(err);
+    setBuses([]);
+  } finally {
     setLoading(false);
-  };
+  }
+};
 
   return (
     <div>
