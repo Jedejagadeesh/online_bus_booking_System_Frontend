@@ -129,7 +129,7 @@ export default function SignupModal() {
 
         {/* EMAIL */}
         <input
-          placeholder="Email"
+          placeholder="Create your Email-Id"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={loading}
@@ -138,7 +138,7 @@ export default function SignupModal() {
         {/* PASSWORD */}
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Create your Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           disabled={loading}

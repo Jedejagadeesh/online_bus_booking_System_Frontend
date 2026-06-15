@@ -1,28 +1,32 @@
-const searchBuses = async () => {
-  if (!from || !to) {
-    alert("Please enter From and To locations");
-    return;
-  }
+import React from "react";
 
-  setLoading(true);
+export default function BusCard({ bus, onSelect }) {
+  return (
+    <div className="bus-card">
+      <div className="bus-header">
+        <h3>{bus.operator || bus.bus_name || "Express Bus"}</h3>
+        <span className="price">₹{bus.price}</span>
+      </div>
 
-  try {
-    const cleanFrom = from.trim();
-    const cleanTo = to.trim();
+      <div className="bus-route">
+        <p>
+          <b>{bus.source}</b> ➜ <b>{bus.destination}</b>
+        </p>
+      </div>
 
-    const res = await searchBusesApi(
-      cleanFrom,
-      cleanTo,
-      journeyDate
-    );
+      <div className="bus-info">
+        <p>Departure: {bus.departure}</p>
+        <p>Arrival: {bus.arrival}</p>
+        <p>Bus Type: {bus.bus_type}</p>
+        <p>Bus No: {bus.bus_number}</p>
+      </div>
 
-    console.log("API Response:", res.data);
-
-    setBuses(Array.isArray(res.data) ? res.data : []);
-  } catch (err) {
-    console.log("SEARCH ERROR:", err);
-    setBuses([]);
-  }
-
-  setLoading(false);
-};
+      <button
+        className="select-btn"
+        onClick={() => onSelect(bus)}
+      >
+        Select Seats
+      </button>
+    </div>
+  );
+}
