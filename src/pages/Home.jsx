@@ -13,8 +13,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
 const searchBuses = async () => {
-  alert(`Searching: ${from} -> ${to}`);
-
   if (!from.trim() || !to.trim()) {
     alert("Please enter From and To locations");
     return;
@@ -29,7 +27,7 @@ const searchBuses = async () => {
       journeyDate
     );
 
-    alert(`Found: ${Array.isArray(res.data) ? res.data.length : 0} buses`);
+    alert(JSON.stringify(res.data)); // TEMP DEBUG
 
     if (Array.isArray(res.data)) {
       setBuses(res.data);
@@ -39,7 +37,7 @@ const searchBuses = async () => {
       setBuses([]);
     }
   } catch (err) {
-    alert("Search API Error");
+    alert("API ERROR");
     console.error(err);
     setBuses([]);
   } finally {

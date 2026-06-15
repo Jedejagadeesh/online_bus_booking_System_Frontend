@@ -2,7 +2,7 @@ import axios from "axios";
 
 // ================= BASE API =================
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: "http://65.0.45.188/api",
 });
 
 // ================= DEBUG =================
